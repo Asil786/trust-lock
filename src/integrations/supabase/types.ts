@@ -14,7 +14,99 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alerts: {
+        Row: {
+          alert_type: Database["public"]["Enums"]["alert_type"]
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          alert_type: Database["public"]["Enums"]["alert_type"]
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          alert_type?: Database["public"]["Enums"]["alert_type"]
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          argon2_hash: string
+          created_at: string | null
+          email: string
+          id: string
+          mfa_secret: string | null
+          salt: string
+          updated_at: string | null
+          vault_key_encrypted: string | null
+        }
+        Insert: {
+          argon2_hash: string
+          created_at?: string | null
+          email: string
+          id: string
+          mfa_secret?: string | null
+          salt: string
+          updated_at?: string | null
+          vault_key_encrypted?: string | null
+        }
+        Update: {
+          argon2_hash?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          mfa_secret?: string | null
+          salt?: string
+          updated_at?: string | null
+          vault_key_encrypted?: string | null
+        }
+        Relationships: []
+      }
+      vault_entries: {
+        Row: {
+          created_at: string | null
+          encrypted_data: string
+          id: string
+          iv: string
+          metadata: Json
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          encrypted_data: string
+          id?: string
+          iv: string
+          metadata?: Json
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          encrypted_data?: string
+          id?: string
+          iv?: string
+          metadata?: Json
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +115,11 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      alert_type:
+        | "breach"
+        | "suspicious_login"
+        | "weak_password"
+        | "key_rotation"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +246,13 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      alert_type: [
+        "breach",
+        "suspicious_login",
+        "weak_password",
+        "key_rotation",
+      ],
+    },
   },
 } as const
