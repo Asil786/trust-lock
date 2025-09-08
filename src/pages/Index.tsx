@@ -1,14 +1,34 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useAuth } from '@/hooks/useAuth';
+import { AuthForm } from '@/components/auth/AuthForm';
+import { VaultUnlock } from '@/components/vault/VaultUnlock';
+import { VaultDashboard } from '@/components/vault/VaultDashboard';
 
 const Index = () => {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
+  const { user, loading, isVaultUnlocked } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-lg text-muted-foreground">Loading...</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // Show auth form if user is not signed in
+  if (!user) {
+    return <AuthForm />;
+  }
+
+  // Show vault unlock if user is signed in but vault is locked
+  if (!isVaultUnlocked) {
+    return <VaultUnlock />;
+  }
+
+  // Show dashboard if user is signed in and vault is unlocked
+  return <VaultDashboard />;
 };
 
 export default Index;
