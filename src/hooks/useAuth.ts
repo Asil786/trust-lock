@@ -119,7 +119,13 @@ export function useAuth() {
 
       // Derive master key and decrypt vault key
       const masterKey = await deriveKeyFromPassword(masterPassword, profile.salt);
-      const encryptedVaultKey = JSON.parse(profile.vault_key_encrypted);
+      let encryptedVaultKey;
+      try {
+        encryptedVaultKey = JSON.parse(profile.vault_key_encrypted || '{}');
+      } catch {
+        // Handle empty or invalid JSON
+        encryptedVaultKey = {};
+      }
       
       // This would normally decrypt the vault key, but for now we'll use the master key
       const vaultKey = masterKey; // Simplified for demo
