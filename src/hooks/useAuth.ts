@@ -51,14 +51,6 @@ export function useAuth() {
 
   const signUp = async (email: string, password: string) => {
     try {
-      const salt = generateSalt();
-      const hashedPassword = await hashPassword(password, salt);
-      
-      // Generate and encrypt vault key
-      const vaultKey = generateVaultKey();
-      const masterKey = await deriveKeyFromPassword(password, salt);
-      const encryptedVaultKey = encryptVaultKey(vaultKey, masterKey);
-
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -69,18 +61,42 @@ export function useAuth() {
 
       if (error) throw error;
 
-      // Store additional profile data
+      // Generate encryption data after successful signup
       if (data.user) {
-        const { error: profileError } = await supabase
+        const salt = generateSalt();
+        const hashedPassword = await hashPassword(password, salt);
+        
+        // Generate and encrypt vault key
+        const vaultKey = generateVaultKey();
+        const masterKey = await deriveKeyFromPassword(password, salt);
+        const encryptedVaultKey = encryptVaultKey(vaultKey, masterKey);
+
+        // First try to insert a new profile, if it exists update it
+        const { error: insertError } = await supabase
           .from('profiles')
-          .update({
+          .insert({
+            id: data.user.id,
+            email: data.user.email!,
             argon2_hash: hashedPassword,
             salt,
             vault_key_encrypted: JSON.stringify(encryptedVaultKey)
-          })
-          .eq('id', data.user.id);
+          });
 
-        if (profileError) throw profileError;
+        if (insertError && insertError.code === '23505') {
+          // If insert fails due to duplicate key, update the existing profile
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({
+              argon2_hash: hashedPassword,
+              salt,
+              vault_key_encrypted: JSON.stringify(encryptedVaultKey)
+            })
+            .eq('id', data.user.id);
+
+          if (updateError) throw updateError;
+        } else if (insertError) {
+          throw insertError;
+        }
       }
 
       return { data, error: null };
@@ -117,14 +133,21 @@ export function useAuth() {
       if (error) throw error;
       if (!profile) throw new Error('Profile not found');
 
+      // Check if profile is incomplete (missing salt or vault_key_encrypted)
+      if (!profile.salt || !profile.vault_key_encrypted) {
+        throw new Error('Your vault is not properly initialized. Please sign out and sign up again to recreate your vault.');
+      }
+
       // Derive master key and decrypt vault key
       const masterKey = await deriveKeyFromPassword(masterPassword, profile.salt);
       let encryptedVaultKey;
       try {
-        encryptedVaultKey = JSON.parse(profile.vault_key_encrypted || '{}');
+        encryptedVaultKey = JSON.parse(profile.vault_key_encrypted);
+        if (!encryptedVaultKey.ciphertext) {
+          throw new Error('Invalid vault data format');
+        }
       } catch {
-        // Handle empty or invalid JSON
-        encryptedVaultKey = {};
+        throw new Error('Invalid vault data. Please sign out and sign up again to recreate your vault.');
       }
       
       // This would normally decrypt the vault key, but for now we'll use the master key
