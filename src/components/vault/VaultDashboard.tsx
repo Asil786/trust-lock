@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Search, Lock, LogOut, Settings, Key } from 'lucide-react';
+import { Plus, Search, Lock, LogOut, Settings, Key, Shield, Award, TrendingUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +7,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { VaultEntry } from '@/lib/crypto';
 import { VaultEntryCard } from './VaultEntryCard';
 import { AddEntryDialog } from './AddEntryDialog';
+import { SecurityInsights } from '@/components/security/SecurityInsights';
+import { MFASetup } from '@/components/auth/MFASetup';
+import { AdvancedSettings } from '@/components/settings/AdvancedSettings';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -16,6 +20,7 @@ export function VaultDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('vault');
 
   const { user, signOut, lockVault, vaultKey } = useAuth();
   const { toast } = useToast();
@@ -148,10 +153,6 @@ export function VaultDashboard() {
                 <Lock className="h-4 w-4 mr-2" />
                 Lock
               </Button>
-              <Button variant="outline" size="sm">
-                <Settings className="h-4 w-4 mr-2" />
-                Settings
-              </Button>
               <Button variant="outline" size="sm" onClick={handleSignOut}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Sign Out
@@ -163,57 +164,92 @@ export function VaultDashboard() {
 
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
-        {/* Search and Add */}
-        <div className="flex gap-4 mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              placeholder="Search your vault..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <Button onClick={() => setIsAddDialogOpen(true)}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add Entry
-          </Button>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="vault" className="flex items-center gap-2">
+              <Key className="h-4 w-4" />
+              Vault
+            </TabsTrigger>
+            <TabsTrigger value="security" className="flex items-center gap-2">
+              <Shield className="h-4 w-4" />
+              Security
+            </TabsTrigger>
+            <TabsTrigger value="mfa" className="flex items-center gap-2">
+              <Lock className="h-4 w-4" />
+              MFA
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="flex items-center gap-2">
+              <Settings className="h-4 w-4" />
+              Settings
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Vault Entries */}
-        {filteredEntries.length === 0 ? (
-          <Card>
-            <CardContent className="pt-6 text-center">
-              <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <CardTitle className="mb-2">
-                {entries.length === 0 ? 'Your vault is empty' : 'No matching entries'}
-              </CardTitle>
-              <CardDescription>
-                {entries.length === 0 
-                  ? 'Add your first password to get started' 
-                  : 'Try adjusting your search terms'
-                }
-              </CardDescription>
-              {entries.length === 0 && (
-                <Button onClick={() => setIsAddDialogOpen(true)} className="mt-4">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Your First Entry
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {filteredEntries.map((entry) => (
-              <VaultEntryCard
-                key={entry.id}
-                entry={entry}
-                onUpdate={handleUpdateEntry}
-                onDelete={handleDeleteEntry}
-              />
-            ))}
-          </div>
-        )}
+          <TabsContent value="vault" className="space-y-6">
+            {/* Search and Add */}
+            <div className="flex gap-4">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                <Input
+                  placeholder="Search your vault..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+              <Button onClick={() => setIsAddDialogOpen(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Entry
+              </Button>
+            </div>
+
+            {/* Vault Entries */}
+            {filteredEntries.length === 0 ? (
+              <Card>
+                <CardContent className="pt-6 text-center">
+                  <Key className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <CardTitle className="mb-2">
+                    {entries.length === 0 ? 'Your vault is empty' : 'No matching entries'}
+                  </CardTitle>
+                  <CardDescription>
+                    {entries.length === 0 
+                      ? 'Add your first password to get started' 
+                      : 'Try adjusting your search terms'
+                    }
+                  </CardDescription>
+                  {entries.length === 0 && (
+                    <Button onClick={() => setIsAddDialogOpen(true)} className="mt-4">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Add Your First Entry
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ) : (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {filteredEntries.map((entry) => (
+                  <VaultEntryCard
+                    key={entry.id}
+                    entry={entry}
+                    onUpdate={handleUpdateEntry}
+                    onDelete={handleDeleteEntry}
+                  />
+                ))}
+              </div>
+            )}
+          </TabsContent>
+
+          <TabsContent value="security">
+            <SecurityInsights entries={entries} />
+          </TabsContent>
+
+          <TabsContent value="mfa">
+            <MFASetup />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <AdvancedSettings />
+          </TabsContent>
+        </Tabs>
       </main>
 
       {/* Add Entry Dialog */}
