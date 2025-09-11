@@ -36,8 +36,6 @@ export function VaultDashboard() {
   }, [entries, searchQuery]);
 
   const loadVaultEntries = async () => {
-    if (!vaultKey) return;
-    
     setLoading(true);
     try {
       const { data, error } = await supabase
