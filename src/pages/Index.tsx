@@ -22,12 +22,7 @@ const Index = () => {
     return <AuthForm />;
   }
 
-  // Show vault unlock if user is signed in but vault is locked
-  if (!isVaultUnlocked) {
-    return <VaultUnlock />;
-  }
-
-  // Show dashboard if user is signed in and vault is unlocked
+  // Show dashboard if user is signed in
   return <VaultDashboard />;
 };
 
