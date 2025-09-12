@@ -25,11 +25,12 @@ import { EditEntryDialog } from './EditEntryDialog';
 
 interface VaultEntryCardProps {
   entry: VaultEntry;
-  onUpdate: (entry: VaultEntry) => void;
-  onDelete: (entryId: string) => void;
+  onUpdate?: (entry: VaultEntry) => void;
+  onDelete?: (entryId: string) => void;
+  onEdit?: (entry: VaultEntry) => void;
 }
 
-export function VaultEntryCard({ entry, onUpdate, onDelete }: VaultEntryCardProps) {
+export function VaultEntryCard({ entry, onUpdate, onDelete, onEdit }: VaultEntryCardProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const { toast } = useToast();
@@ -62,8 +63,13 @@ export function VaultEntryCard({ entry, onUpdate, onDelete }: VaultEntryCardProp
 
   const handleDelete = () => {
     if (window.confirm('Are you sure you want to delete this entry?')) {
-      onDelete(entry.id!);
+      if (onDelete) onDelete(entry.id!);
     }
+  };
+
+  const handleUpdate = (updatedEntry: VaultEntry) => {
+    const updateFunction = onEdit || onUpdate;
+    if (updateFunction) updateFunction(updatedEntry);
   };
 
   return (
@@ -202,7 +208,7 @@ export function VaultEntryCard({ entry, onUpdate, onDelete }: VaultEntryCardProp
         entry={entry}
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
-        onUpdate={onUpdate}
+        onUpdate={handleUpdate}
       />
     </>
   );

@@ -77,6 +77,108 @@ export type Database = {
         }
         Relationships: []
       }
+      security_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_gamification: {
+        Row: {
+          badges: Json | null
+          completed_challenges: Json | null
+          created_at: string | null
+          id: string
+          last_activity_date: string | null
+          level: number | null
+          streak_days: number | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          badges?: Json | null
+          completed_challenges?: Json | null
+          created_at?: string | null
+          id?: string
+          last_activity_date?: string | null
+          level?: number | null
+          streak_days?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          badges?: Json | null
+          completed_challenges?: Json | null
+          created_at?: string | null
+          id?: string
+          last_activity_date?: string | null
+          level?: number | null
+          streak_days?: number | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          auto_lock_minutes: number | null
+          created_at: string | null
+          educational_tips_enabled: boolean | null
+          gamification_enabled: boolean | null
+          id: string
+          password_generator_length: number | null
+          password_generator_options: Json | null
+          theme: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          auto_lock_minutes?: number | null
+          created_at?: string | null
+          educational_tips_enabled?: boolean | null
+          gamification_enabled?: boolean | null
+          id?: string
+          password_generator_length?: number | null
+          password_generator_options?: Json | null
+          theme?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          auto_lock_minutes?: number | null
+          created_at?: string | null
+          educational_tips_enabled?: boolean | null
+          gamification_enabled?: boolean | null
+          id?: string
+          password_generator_length?: number | null
+          password_generator_options?: Json | null
+          theme?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       vault_entries: {
         Row: {
           created_at: string | null
@@ -112,7 +214,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_password_hash: {
+        Args: { password_hash: string }
+        Returns: boolean
+      }
     }
     Enums: {
       alert_type:

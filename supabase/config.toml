@@ -82,3 +82,6 @@ verify_jwt = true
 
 [functions.analyze-passwords]
 verify_jwt = true
+
+[functions.extension-api]
+verify_jwt = true
