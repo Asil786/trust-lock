@@ -22,9 +22,9 @@ const Index = () => {
     return <AuthForm />;
   }
 
-  if (!isVaultUnlocked) {
-    return <VaultUnlock />;
-  }
+  // if (!isVaultUnlocked) {
+  //   return <VaultUnlock />;
+  // }
 
   // Show dashboard if user is signed in
   return <VaultDashboard />;
