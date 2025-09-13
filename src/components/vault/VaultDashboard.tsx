@@ -222,7 +222,7 @@ export function VaultDashboard() {
               </div>
             </EducationalTooltip>
             <span className="text-xs text-muted-foreground">
-              <a href="https://secure-vaults-six.vercel.app/dashboard"></a>Agents
+              <a href="https://secure-vaults-six.vercel.app/dashboard">Agents</a>
             </span>
             {/* Auto-lock timer */}
             {timeUntilLock > 0 && (
