@@ -221,7 +221,9 @@ export function VaultDashboard() {
                 {isOnline ? 'Online' : 'Offline'}
               </div>
             </EducationalTooltip>
-
+            <span className="text-xs text-muted-foreground">
+              <a href="https://secure-vaults-six.vercel.app/dashboard"></a>Agents
+            </span>
             {/* Auto-lock timer */}
             {timeUntilLock > 0 && (
               <EducationalTooltip
