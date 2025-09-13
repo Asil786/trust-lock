@@ -46,8 +46,8 @@ const chatbot = () => {
               className="w-full h-full"
             >
               <iframe 
-            //   https://labs.heygen.com/interactive-avatar/share?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJQZWRyb19DYXN1YWxMb29rX3B1YmxpYyIs%0D%0AInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3YzLzRjYTdlYjc0%0D%0ANDJmNzRmZTBiYmNjMjA1ZjNmZTZmMjcxXzU1OTAwL3ByZXZpZXdfdGFyZ2V0LndlYnAiLCJuZWVk%0D%0AUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImYxMTZkOWNlZmM5NzQz%0D%0AYWU5NGNmMDc0YWRmYWRmMzIzIiwidXNlcm5hbWUiOiJhMjNiYzM5YzE5ZmQ0ZTJkYjkzN2FlMzhh%0D%0AOGEzMDZjZCJ9
-                src="https://labs.heygen.com/interactive-avatar/share?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJQZWRyb19DYXN1YWxMb29rX3B1YmxpYyIs%0D%0AInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3YzLzRjYTdlYjc0%0D%0ANDJmNzRmZTBiYmNjMjA1ZjNmZTZmMjcxXzU1OTAwL3ByZXZpZXdfdGFyZ2V0LndlYnAiLCJuZWVk%0D%0AUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImYxMTZkOWNlZmM5NzQz%0D%0AYWU5NGNmMDc0YWRmYWRmMzIzIiwidXNlcm5hbWUiOiJhMjNiYzM5YzE5ZmQ0ZTJkYjkzN2FlMzhh%0D%0AOGEzMDZjZCJ9&inIFrame=1"
+            //   https://labs.heygen.com/interactive-avatar/share?share=
+                src="https://labs.heygen.com/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJQZWRyb19DYXN1YWxMb29rX3B1YmxpYyIs%0D%0AInByZXZpZXdJbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3YzLzRjYTdlYjc0%0D%0ANDJmNzRmZTBiYmNjMjA1ZjNmZTZmMjcxXzU1OTAwL3ByZXZpZXdfdGFyZ2V0LndlYnAiLCJuZWVk%0D%0AUmVtb3ZlQmFja2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImYxMTZkOWNlZmM5NzQz%0D%0AYWU5NGNmMDc0YWRmYWRmMzIzIiwidXNlcm5hbWUiOiJhMjNiYzM5YzE5ZmQ0ZTJkYjkzN2FlMzhh%0D%0AOGEzMDZjZCJ9&inIFrame=1"
                 allow="microphone"
                 onLoad={handleIframeLoad}
                 allowFullScreen
